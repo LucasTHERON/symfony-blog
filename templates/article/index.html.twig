@@ -4,4 +4,9 @@
 
 <h1>{{ msg }}</h1>
 
+
+{% if app.user %}
+    <h2>You are logged in as {{ app.user.name }}</h2>
+{% endif %}
+
 {% endblock %}
