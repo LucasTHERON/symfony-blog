@@ -20,8 +20,8 @@ class Article
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column]
-    private ?int $author_id = null;
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    private ?User $author = null;
 
     public function getId(): ?int
     {
@@ -52,14 +52,14 @@ class Article
         return $this;
     }
 
-    public function getAuthorId(): ?int
+    public function getAuthor(): ?User
     {
-        return $this->author_id;
+        return $this->author;
     }
 
-    public function setAuthorId(int $author_id): static
+    public function setAuthor(?User $author): static
     {
-        $this->author_id = $author_id;
+        $this->author = $author;
 
         return $this;
     }
