@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1>Add article</h1>
+
+
+{% if app.user %}
+    {{ include('article/_form.html.twig') }}
+{% else %}
+    <h2>You have to <a href="{{ path('app_register') }}">create an account</a> to submit articles</h2>
+{% endif %}
+
+{% endblock %}
