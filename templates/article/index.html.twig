@@ -2,11 +2,16 @@
 
 {% block body %}
 
-<h1>{{ msg }}</h1>
+<h1>Articles</h1>
 
-
-{% if app.user %}
-    <h2>You are logged in as {{ app.user.name }}</h2>
-{% endif %}
+    {% for article in articles %}
+    <a href="{{ path('article_show', {'id': article.id, 'title': article.title}) }}">
+        <div class="article-card">
+            <h2 class="title">{{ article.title }}</h2>
+            <p class="content">{{ article.content }}</p>
+            <p class="author">{{ article.author.name }}</p>
+        </div>
+    </a>
+    {% endfor %}
 
 {% endblock %}

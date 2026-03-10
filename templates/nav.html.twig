@@ -2,7 +2,7 @@
     <a href="{{ path('article_index')}}">Home</a>
     {% if app.user %}
         <a href="/">My articles</a>
-        <a href="/">Add an article</a>
+        <a href="{{ path('article_add') }}">Add an article</a>
         <a href="{{ path('app_logout') }}">Logout</a>
     {% else %}
         <a href="{{ path('app_login') }}">Login</a>

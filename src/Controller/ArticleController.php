@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
 use App\Form\ArticleType;
+
+use Doctrine\ORM\EntityManagerInterface;
 
 final class ArticleController extends AbstractController
 {
@@ -28,20 +31,30 @@ final class ArticleController extends AbstractController
 
         $article = $repository->find($id);
 
-        dd($article);
-
         return $this->render('article/show.html.twig', [
-            'id'   =>  $id
+            'article'   =>  $article
         ]);
     }
 
     #[Route('/article/add', name: 'article_add')]
-    public function add(): Response
+    public function add(Request $request, EntityManagerInterface $em): Response
     {
 
         $article = new Article;
 
         $form = $this->createForm(ArticleType::class, $article);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $article->setAuthor($this->getUser());
+            $em->persist($article);
+            $em->flush();
+
+            return $this->redirectToRoute('article_index');
+        }
+
+
 
         return $this->render('article/add.html.twig', [
             'form'   =>  $form
