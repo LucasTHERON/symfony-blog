@@ -60,4 +60,43 @@ final class ArticleController extends AbstractController
             'form'   =>  $form
         ]);
     }
+
+    #[Route('/article/edit/{id}', name: 'article_edit')]
+    public function edit(Article $article, Request $request, EntityManagerInterface $em): Response
+    {
+
+        $form = $this->createForm(ArticleType::class, $article);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $em->flush();
+
+            return $this->redirectToRoute('article_index');
+        }
+
+
+
+        return $this->render('article/edit.html.twig', [
+            'form'   =>  $form
+        ]);
+    }
+
+    #[Route('/article/delete/{id}', name: 'article_delete')]
+    public function delete(Article $article, Request $request, EntityManagerInterface $em): Response
+    {
+
+        if($request->isMethod('POST')){
+            $em->remove($article); 
+
+            $em->flush();
+
+            return $this->redirectToRoute('article_index');
+        }
+
+        return $this->render('article/delete.html.twig', [
+            'id'   =>  $article->getId()
+        ]);
+    }
 }
