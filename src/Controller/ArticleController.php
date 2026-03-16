@@ -11,6 +11,8 @@ use App\Entity\Article;
 use App\Repository\ArticleRepository;
 use App\Form\ArticleType;
 
+use App\Repository\UserRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
 
 final class ArticleController extends AbstractController
@@ -33,6 +35,19 @@ final class ArticleController extends AbstractController
 
         return $this->render('article/show.html.twig', [
             'article'   =>  $article
+        ]);
+    }
+
+    #[Route('/user/{id}', name: 'article_show_user')]
+    public function show_user($id, ArticleRepository $article_repository, UserRepository $user_repository): Response
+    {
+
+        $user = $user_repository->find($id);
+        $articles = $article_repository->findBy(['author' => $user->getId()]);
+
+        return $this->render('article/show_user.html.twig', [
+            'user'   =>  $user,
+            'articles'  =>  $articles
         ]);
     }
 
