@@ -80,6 +80,10 @@ final class ArticleController extends AbstractController
     public function edit(Article $article, Request $request, EntityManagerInterface $em): Response
     {
 
+        if($this->getUser()->getId() !== $article->getAuthor()->getId()){
+            return $this->redirectToRoute('article_index');
+        }
+
         $form = $this->createForm(ArticleType::class, $article);
 
         $form->handleRequest($request);
@@ -99,8 +103,12 @@ final class ArticleController extends AbstractController
     }
 
     #[Route('/article/delete/{id}', name: 'article_delete')]
-    public function delete(Article $article, Request $request, EntityManagerInterface $em): Response
+    public function delete($id, Article $article, Request $request, EntityManagerInterface $em): Response
     {
+
+        if($this->getUser()->getId() !== $article->getAuthor()->getId()){
+            return $this->redirectToRoute('article_index');
+        }
 
         if($request->isMethod('POST')){
             $em->remove($article); 
